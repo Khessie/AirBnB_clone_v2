@@ -2,27 +2,19 @@
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 
-classes = ['BaseModel', 'User', 'Place', 'State', 'City', 'Amenity', 'Review']
-
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self, cls=None):  # need an update
+    def all(self):
         """Returns a dictionary of models currently in storage"""
-        if cls is None:
-            return FileStorage.__objects
-        else:
-            return {key: value for key, value in FileStorage.__objects.items() if type(value) == cls}
+        return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        # self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
-        _obj = obj.__class__.__name__ + '.' + obj.id
-        update_dict = {_obj: obj}
-        FileStorage.__objects.update(update_dict)
+        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -56,9 +48,3 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-
-    def delete(self, obj=None):  # will need to check this out
-        for key in FileStorage.__objects:
-            if FileStorage.__objects[key] == obj:
-                del FileStorage.__objects[key]
-                break
