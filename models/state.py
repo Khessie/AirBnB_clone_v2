@@ -16,6 +16,7 @@ class State(BaseModel):
     else:
         @property
         def cities(self):
+            """return all city instances"""
             from models import storage
             objs = storage.all(City)
             return [v for k, v in objs.items() if v.state_id == self.id]
