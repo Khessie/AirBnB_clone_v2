@@ -15,17 +15,17 @@ from models.user import User
 
 
 class DBStorage:
-    """DBStorage class"""
+    """The Database Storage engine"""
     __engine = None
     __session = None
 
     def __init__(self):
         """initializing the DBStorage objects"""
         self.__engine = create_engine('mysql+mysqldb://'
-                               f'{getenv("HBNB_MYSQL_USER")}:'
-                               f'{getenv("HBNB_MYSQL_PWD")}@'
-                               f'{getenv("HBNB_MYSQL_HOST")}/'
-                               f'{getenv("HBNB_MYSQL_DB")}',
+                                      f'{getenv("HBNB_MYSQL_USER")}:'
+                                      f'{getenv("HBNB_MYSQL_PWD")}@'
+                                      f'{getenv("HBNB_MYSQL_HOST")}/'
+                                      f'{getenv("HBNB_MYSQL_DB")}',
                                       pool_pre_ping=True)
 
         if getenv("HBNB_ENV") == "test":
@@ -47,15 +47,15 @@ class DBStorage:
             return obj_dict
 
     def new(self, obj):
-        """adds a new object to the session"""
+        """add new object to the current session"""
         self.__session.add(obj)
 
     def save(self):
-        """commits all changes made in the session"""
+        """commit all changes the current session"""
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an object in the current storage"""
+        """delete an object from the current session"""
         if obj is not None:
             self.__session.delete(obj)
 
@@ -64,3 +64,4 @@ class DBStorage:
         self.__session = scoped_session(sessionmaker()(bind=self.__engine,
                                         expire_on_commit=False))
         Base.metadata.create_all(self.__engine)
+
