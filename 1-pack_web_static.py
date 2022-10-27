@@ -9,11 +9,13 @@ def do_pack():
     """function to zip files"""
     new_date = datetime.now()
     new_date = new_date.strftime('%Y%m%d%H%M%S')
+    archive = f"versions/web_static_{new_date}.tgz"
     if isdir('versions') is False:
         local('mkdir versions')
-    print(f"Packing web_static to versions/web_static_{new_date}.tgz")
-    var = local(f'tar -cvzf versions/web_static_{new_date}.tgz web_static')
+    print(f"Packing web_static to {archive}")
+    var = local(f'tar -cvzf {archive} web_static')
 
     if var.succeeded:
-        return f'versions/web_static_{new_date}.tgz'
-    return None
+        return archive
+    else:
+        return None
