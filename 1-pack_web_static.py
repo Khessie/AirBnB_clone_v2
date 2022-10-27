@@ -5,6 +5,7 @@ from datetime import datetime
 
 
 def do_pack():
+    """function to zip files"""
     new_date = datetime.now()
     new_date = new_date.strftime('%Y%m%d%H%M%S')
     local('mkdir -p versions/')
