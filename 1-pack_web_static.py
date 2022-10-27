@@ -1,20 +1,21 @@
 #!/usr/bin/python3
 """create archive module"""
-from os.path import isdir
+from os.path
 from fabric.api import local
 from datetime import datetime
 
-
 def do_pack():
-    """function to zip files"""
-    try:
-        new_date = datetime.now()
-        new_date = new_date.strftime('%Y%m%d%H%M%S')
-        archive = f"versions/web_static_{new_date}.tgz"
-        if isdir('versions') is False:
-            local('mkdir versions')
-        print(f"Packing web_static to {archive}")
-        var = local(f'tar -cvzf {archive} web_static')
-        return archive
-    except Exception:
+    """Create a tar gzipped archive of the directory web_static."""
+    dt = datetime.utcnow()
+    file = "versions/web_static_{}{}{}{}{}{}.tgz".format(dt.year,
+                                                         dt.month,
+                                                         dt.day,
+                                                         dt.hour,
+                                                         dt.minute,
+                                                         dt.second)
+    if os.path.isdir("versions") is False:
+        if local("mkdir -p versions").failed is True:
+            return None
+    if local("tar -cvzf {} web_static".format(file)).failed is True:
         return None
+    return file
